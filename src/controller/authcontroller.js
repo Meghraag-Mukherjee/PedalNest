@@ -22,7 +22,15 @@ export const register = async (req, res) => {
     if (exists) {
       return res.status(409).json({ message: "Email already registered" });
     }
+    const existsEmail = await User.findOne({ where: { email } });
+    if (existsEmail) {
+    return res.status(409).json({ message: "Email already registered" });
+    }
 
+   const existsPhone = await User.findOne({ where: { phone } });
+   if (existsPhone) {
+    return res.status(409).json({ message: "Phone already registered" });
+     }
     const hash = await bcrypt.hash(password, 10);
 
     const user = await User.create({
